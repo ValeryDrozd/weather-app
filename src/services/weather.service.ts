@@ -8,6 +8,9 @@ export const getWeather = async (city: string): Promise<Weather> => {
   url.searchParams.append('units', 'metric');
   url.searchParams.append('appid', process.env.REACT_APP_WEATHER_API_KEY || '');
   const res = await fetch(url.toString());
+  if (!res.ok) {
+    throw new Error('Invalid city');
+  }
   const obj = await res.json();
 
   return {
@@ -17,6 +20,7 @@ export const getWeather = async (city: string): Promise<Weather> => {
     feelsLike: obj.main.feels_like,
     windSpeed: obj.wind.speed,
     description: obj.weather[0].main,
+    imageURL: `https://openweathermap.org/img/wn/${obj.weather[0].icon}@2x.png`,
   };
 };
 

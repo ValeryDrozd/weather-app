@@ -5,4 +5,5 @@ export default interface Weather {
   feelsLike: number;
   windSpeed: number;
   description: string;
+  imageURL: string;
 }
