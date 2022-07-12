@@ -10,7 +10,7 @@ import {
   updateCityWeather,
 } from './weatherSlice';
 import { TextField, Button } from '@mui/material';
-import Weather from '../../interfaces/Weather.interface';
+import CityWeather from '../../interfaces/Weather.interface';
 import DetailedWeatherModal from '../DetailedWeatherModal/DetailedWeatherModal';
 import Spinner from '../Spinner/Spinner';
 
@@ -19,9 +19,8 @@ export default function WeatherList(): JSX.Element {
     (state: RootState) => state.weather,
   );
   const dispatch = useDispatch<AppDispatch>();
-  const [currectCityWeather, setCurrentCityWeather] = useState<Weather | null>(
-    null,
-  );
+  const [currectCityWeather, setCurrentCityWeather] =
+    useState<CityWeather | null>(null);
 
   useEffect(() => {
     dispatch(fetchCitiesWeather());
@@ -39,6 +38,7 @@ export default function WeatherList(): JSX.Element {
 
   const weatherCards = citiesWeather.map((item) => (
     <WeatherCard
+      key={`${item.cityName}-card`}
       cityWeather={item}
       onClick={(): void => setCurrentCityWeather(item)}
       onDelete={(): void => handleCityWeatherDelete(item.cityName)}
@@ -46,12 +46,13 @@ export default function WeatherList(): JSX.Element {
     />
   ));
 
-  const modal = !!currectCityWeather ? (
+  const modal = (
     <DetailedWeatherModal
+      open={!!currectCityWeather}
       onClose={(): void => setCurrentCityWeather(null)}
       cityWeather={currectCityWeather}
     />
-  ) : null;
+  );
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,

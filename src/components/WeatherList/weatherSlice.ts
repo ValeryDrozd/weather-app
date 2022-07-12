@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import Weather from '../../interfaces/Weather.interface';
+import CityWeather from '../../interfaces/Weather.interface';
 import { getWeather } from '../../services/weather.service';
 
 const LOCAL_STORAGE_CITIES_KEY = 'cities';
@@ -14,7 +14,7 @@ const getCitiesFromLocalStorage = (): string[] => {
 };
 
 interface WeatherState {
-  citiesWeather: Weather[];
+  citiesWeather: CityWeather[];
   loading: boolean;
   error: string | null;
 }
@@ -100,7 +100,7 @@ const weatherSlice = createSlice({
 
 export const { removeCity } = weatherSlice.actions;
 
-export const addNewCity = createAsyncThunk<Weather, string>(
+export const addNewCity = createAsyncThunk<CityWeather, string>(
   'weather/addNewCity',
   async (city) => {
     const weather = await getWeather(city);
@@ -108,7 +108,7 @@ export const addNewCity = createAsyncThunk<Weather, string>(
   },
 );
 
-export const fetchCitiesWeather = createAsyncThunk<Weather[]>(
+export const fetchCitiesWeather = createAsyncThunk<CityWeather[]>(
   'weather/fetchCitiesWeather',
   async () => {
     const cities = getCitiesFromLocalStorage();
@@ -118,7 +118,7 @@ export const fetchCitiesWeather = createAsyncThunk<Weather[]>(
   },
 );
 
-export const updateCityWeather = createAsyncThunk<Weather, string>(
+export const updateCityWeather = createAsyncThunk<CityWeather, string>(
   'weather/fetchCityWeather',
   async (city) => {
     const weather = await getWeather(city);

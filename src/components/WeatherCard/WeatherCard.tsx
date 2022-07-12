@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import Weather from '../../interfaces/Weather.interface';
+import CityWeather from '../../interfaces/Weather.interface';
 import { Card, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/DeleteRounded';
 import UpdateIcon from '@mui/icons-material/Update';
 import React from 'react';
 
 interface Props {
-  cityWeather: Weather;
+  cityWeather: CityWeather;
   onClick: () => void;
   onDelete: () => void;
   onUpdate: () => void;
