@@ -44,6 +44,9 @@ export const getHourlyWeather = async (
   url.searchParams.append('appid', process.env.REACT_APP_WEATHER_API_KEY || '');
   const res = await fetch(url.toString());
   const obj = await res.json();
+  if (!res.ok) {
+    throw new Error('Invalid city');
+  }
 
   const forecast: HourlyWeather[] = obj.list.map(
     (item: Record<string, any>) => ({

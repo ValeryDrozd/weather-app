@@ -3,37 +3,44 @@ import CityWeather from '../../interfaces/Weather.interface';
 import { Card, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/DeleteRounded';
 import UpdateIcon from '@mui/icons-material/Update';
-import React from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store';
+import { removeCity, updateCityWeather } from '../WeatherList/weatherSlice';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface Props {
   cityWeather: CityWeather;
-  onClick: () => void;
-  onDelete: () => void;
-  onUpdate: () => void;
 }
 
-export default function WeatherCard({
-  cityWeather,
-  onClick,
-  onDelete,
-  onUpdate,
-}: Props): JSX.Element {
+export default function WeatherCard({ cityWeather }: Props): JSX.Element {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const handleDeleteButtonClick = (
     e: React.MouseEvent<HTMLButtonElement>,
   ): void => {
     e.stopPropagation();
-    onDelete();
+    dispatch(removeCity(cityWeather.cityName));
   };
 
   const handleUpdateButtonClick = (
     e: React.MouseEvent<HTMLButtonElement>,
   ): void => {
     e.stopPropagation();
-    onUpdate();
+    dispatch(updateCityWeather(cityWeather.cityName));
+  };
+
+  const handleCardClick = (): void => {
+    navigate(`details?city=${cityWeather.cityName}`, {
+      state: {
+        backgroundLocation: location,
+      },
+    });
   };
 
   return (
-    <StyledCard onClick={onClick}>
+    <StyledCard onClick={handleCardClick}>
       <CardRow>
         <StyledHeader>
           {cityWeather.cityName} ({cityWeather.country})

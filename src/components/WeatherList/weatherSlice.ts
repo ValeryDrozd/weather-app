@@ -39,6 +39,9 @@ const weatherSlice = createSlice({
         (weather) => weather.cityName !== payload,
       );
     },
+    setError: (state, { payload }: { payload: string | null }) => {
+      state.error = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCitiesWeather.pending, (state) => {
@@ -48,6 +51,7 @@ const weatherSlice = createSlice({
     builder.addCase(fetchCitiesWeather.fulfilled, (state, { payload }) => {
       state.citiesWeather = payload;
       state.loading = false;
+      state.error = null;
     });
     builder.addCase(fetchCitiesWeather.rejected, (state) => {
       state.citiesWeather = [];
@@ -91,14 +95,14 @@ const weatherSlice = createSlice({
       }
       state.loading = false;
     });
-    builder.addCase(addNewCity.rejected, (state, { payload }) => {
+    builder.addCase(addNewCity.rejected, (state) => {
       state.error = "Incorrect entry. Couldn't find city";
       state.loading = false;
     });
   },
 });
 
-export const { removeCity } = weatherSlice.actions;
+export const { removeCity, setError } = weatherSlice.actions;
 
 export const addNewCity = createAsyncThunk<CityWeather, string>(
   'weather/addNewCity',

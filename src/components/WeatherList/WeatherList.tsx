@@ -3,15 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { AppDispatch, RootState } from '../../store/store';
 import WeatherCard from '../WeatherCard/WeatherCard';
-import {
-  addNewCity,
-  fetchCitiesWeather,
-  removeCity,
-  updateCityWeather,
-} from './weatherSlice';
+import { addNewCity, fetchCitiesWeather, setError } from './weatherSlice';
 import { TextField, Button } from '@mui/material';
-import CityWeather from '../../interfaces/Weather.interface';
-import DetailedWeatherModal from '../DetailedWeatherModal/DetailedWeatherModal';
 import Spinner from '../Spinner/Spinner';
 
 export default function WeatherList(): JSX.Element {
@@ -19,40 +12,15 @@ export default function WeatherList(): JSX.Element {
     (state: RootState) => state.weather,
   );
   const dispatch = useDispatch<AppDispatch>();
-  const [currectCityWeather, setCurrentCityWeather] =
-    useState<CityWeather | null>(null);
+  const [inputCity, setInputCity] = useState<string>('');
 
   useEffect(() => {
     dispatch(fetchCitiesWeather());
   }, [dispatch]);
 
-  const [inputCity, setInputCity] = useState<string>('');
-
-  const handleCityWeatherDelete = (cityName: string): void => {
-    dispatch(removeCity(cityName));
-  };
-
-  const handleCityWeatherUpdate = (cityName: string): void => {
-    dispatch(updateCityWeather(cityName));
-  };
-
   const weatherCards = citiesWeather.map((item) => (
-    <WeatherCard
-      key={`${item.cityName}-card`}
-      cityWeather={item}
-      onClick={(): void => setCurrentCityWeather(item)}
-      onDelete={(): void => handleCityWeatherDelete(item.cityName)}
-      onUpdate={(): void => handleCityWeatherUpdate(item.cityName)}
-    />
+    <WeatherCard key={`${item.cityName}-card`} cityWeather={item} />
   ));
-
-  const modal = (
-    <DetailedWeatherModal
-      open={!!currectCityWeather}
-      onClose={(): void => setCurrentCityWeather(null)}
-      cityWeather={currectCityWeather}
-    />
-  );
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -64,7 +32,6 @@ export default function WeatherList(): JSX.Element {
 
   return (
     <WeatherListBlock>
-      {modal}
       <Spinner open={loading} />
       <SearchDiv>
         <SearchForm onSubmit={handleSubmit}>
@@ -72,11 +39,18 @@ export default function WeatherList(): JSX.Element {
             error={!!error}
             label="Input City"
             value={inputCity}
-            onChange={({ target }): void => setInputCity(target.value)}
+            onChange={({ target }): void => {
+              if (error) {
+                dispatch(setError(null));
+              }
+              setInputCity(target.value);
+            }}
             helperText={error}
             variant="filled"
           />
-          <Button type="submit">Search</Button>
+          <Button className="submit-button" type="submit">
+            Search
+          </Button>
         </SearchForm>
       </SearchDiv>
       <CardBlock>{weatherCards}</CardBlock>

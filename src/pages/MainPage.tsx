@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import WeatherList from '../components/WeatherList/WeatherList';
+import React from 'react';
 
 export default function MainPage(): JSX.Element {
   return (

@@ -5,8 +5,8 @@
   "dependencies": {
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.9.0",
-    "@mui/styled-engine-sc": "^5.8.0",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
+    "@mui/styled-engine-sc": "^5.8.0",
     "@reduxjs/toolkit": "^1.8.3",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -26,7 +26,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
     "lint": "eslint --fix ."
   },
@@ -62,8 +62,12 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "4",
+    "jest": "^28.1.3",
+    "jest-environment-jsdom": "^28.1.3",
     "lint-staged": "^13.0.3",
-    "prettier": "2.7.1"
+    "prettier": "2.7.1",
+    "ts-jest": "^28.0.5",
+    "ts-node": "^10.8.2"
   },
   "husky": {
     "hooks": {

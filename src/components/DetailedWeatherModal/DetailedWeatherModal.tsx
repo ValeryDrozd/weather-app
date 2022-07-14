@@ -1,41 +1,50 @@
 import { CircularProgress, Modal } from '@mui/material';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import CityWeather, {
+import {
   DetailedCityWeather,
   HourlyWeather,
 } from '../../interfaces/Weather.interface';
 import { getHourlyWeather } from '../../services/weather.service';
 import HourlyWeatherForecast from '../HourlyWeatherRow/HourlyWeatherRow';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
-interface Props {
-  cityWeather: CityWeather | null;
-  open: boolean;
-  onClose: () => void;
-}
-
-export default function DetailedWeatherModal({
-  cityWeather,
-  open,
-  onClose,
-}: Props): JSX.Element {
+export default function DetailedWeatherModal(): JSX.Element {
   const [detailedWeather, setDetailedWeather] =
     useState<DetailedCityWeather | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const city = searchParams.get('city');
+  const citiesWeather = useSelector(
+    (state: RootState) => state.weather.citiesWeather,
+  );
+  const navigate = useNavigate();
+
+  const handleClose = (): void => navigate('/');
+
+  if (!citiesWeather.find((cw) => cw.cityName === city)) {
+    handleClose();
+  }
+
   const fetchDetailedWeather = async (): Promise<void> => {
     setLoading(true);
-    const weather = await getHourlyWeather(cityWeather?.cityName as string);
+    const weather = await getHourlyWeather(city as string);
     setDetailedWeather(weather);
     setLoading(false);
   };
   useEffect(() => {
-    if (cityWeather) {
+    if (city) {
       fetchDetailedWeather();
     } else {
       setDetailedWeather(null);
     }
-  }, [cityWeather]);
+    // eslint-disable-next-line
+  }, [city]);
 
   const content = loading ? (
     <SpinnerContainer>
@@ -46,10 +55,12 @@ export default function DetailedWeatherModal({
       forecast={detailedWeather?.forecast as HourlyWeather[]}
     />
   );
+
   return (
-    <ModalContentWrapper open={open} onClose={onClose}>
+    <ModalContentWrapper open onClose={handleClose}>
       <ModalContent>
-        <Title>Detailed Weather Info for {cityWeather?.cityName}</Title>
+        <CloseIcon onClick={handleClose} />
+        <Title>Detailed Weather Info for {city}</Title>
         {content}
       </ModalContent>
     </ModalContentWrapper>
@@ -90,4 +101,8 @@ const SpinnerContainer = styled.div`
   & > * {
     margin: auto;
   }
+`;
+
+const CloseIcon = styled(CancelIcon)`
+  cursor: pointer;
 `;
