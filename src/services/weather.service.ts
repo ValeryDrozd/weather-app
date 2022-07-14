@@ -49,10 +49,20 @@ export const getHourlyWeather = async (
   }
 
   const forecast: HourlyWeather[] = obj.list.map(
-    (item: Record<string, any>) => ({
-      ...mapWeatherFromApi(item),
-      date: new Date(item.dt_txt),
-    }),
+    (item: Record<string, any>) => {
+      const dateParts = item.dt_txt.split(/[- :]/);
+      return {
+        ...mapWeatherFromApi(item),
+        date: new Date(
+          dateParts[0],
+          dateParts[1] - 1,
+          dateParts[2],
+          dateParts[3],
+          dateParts[4],
+          dateParts[5],
+        ),
+      };
+    },
   );
   return {
     cityName: obj.city.name,

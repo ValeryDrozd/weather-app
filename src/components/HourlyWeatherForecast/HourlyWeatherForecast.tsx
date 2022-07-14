@@ -31,7 +31,7 @@ export default function HourlyWeatherForecast({
         {currentForecast.map(({ imageURL, temperature, date }) => {
           const percentage = (average - Math.round(temperature)) / radius; // relative to average
 
-          const day = date.getDay(),
+          const day = date.getDate(),
             month = date.getMonth();
           const dayStr = `${day < 10 ? '0' : ''}${day}`;
           const monthStr = `${month < 10 ? '0' : ''}${month}`;
