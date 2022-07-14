@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import DetailedWeatherModal from './components/DetailedWeatherModal/DetailedWeatherModal';
 import MainPage from './pages/MainPage';
 import React from 'react';
@@ -10,6 +10,7 @@ export default function App(): JSX.Element {
     <>
       <Routes location={state?.backgroundLocation || location}>
         <Route path="/" element={<MainPage />} />
+        {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
       </Routes>
       {state?.backgroundLocation && (
         <Routes>

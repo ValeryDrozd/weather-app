@@ -6,7 +6,7 @@ import {
   HourlyWeather,
 } from '../../interfaces/Weather.interface';
 import { getHourlyWeather } from '../../services/weather.service';
-import HourlyWeatherForecast from '../HourlyWeatherRow/HourlyWeatherRow';
+import HourlyWeatherForecast from '../HourlyWeatherForecast/HourlyWeatherForecast';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';

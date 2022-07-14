@@ -29,7 +29,7 @@ export default function HourlyWeatherForecast({
     return (
       <Row key={`${index}-row`}>
         {currentForecast.map(({ imageURL, temperature, date }) => {
-          const percentage = (average - temperature) / radius; // relative to average
+          const percentage = (average - Math.round(temperature)) / radius; // relative to average
 
           const day = date.getDay(),
             month = date.getMonth();
