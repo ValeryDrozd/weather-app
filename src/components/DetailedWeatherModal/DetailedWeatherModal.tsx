@@ -9,8 +9,7 @@ import { getHourlyWeather } from '../../services/weather.service';
 import HourlyWeatherForecast from '../HourlyWeatherForecast/HourlyWeatherForecast';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
+import { getCitiesFromLocalStorage } from '../WeatherList/weatherSlice';
 
 export default function DetailedWeatherModal(): JSX.Element {
   const [detailedWeather, setDetailedWeather] =
@@ -20,14 +19,14 @@ export default function DetailedWeatherModal(): JSX.Element {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const city = searchParams.get('city');
-  const citiesWeather = useSelector(
-    (state: RootState) => state.weather.citiesWeather,
-  );
+
   const navigate = useNavigate();
 
-  const handleClose = (): void => navigate('/');
+  const handleClose = (): void => {
+    navigate('/');
+  };
 
-  if (!citiesWeather.find((cw) => cw.cityName === city)) {
+  if (!getCitiesFromLocalStorage().find((cityName) => cityName === city)) {
     handleClose();
   }
 
@@ -41,14 +40,14 @@ export default function DetailedWeatherModal(): JSX.Element {
     if (city) {
       fetchDetailedWeather();
     } else {
-      setDetailedWeather(null);
+      handleClose();
     }
     // eslint-disable-next-line
   }, [city]);
 
   const content = loading ? (
     <SpinnerContainer>
-      <CircularProgress size={60} color="secondary" />
+      <CircularProgress role="loading" size={60} color="secondary" />
     </SpinnerContainer>
   ) : (
     <HourlyWeatherForecast
@@ -60,7 +59,7 @@ export default function DetailedWeatherModal(): JSX.Element {
     <ModalContentWrapper open onClose={handleClose}>
       <ModalContent>
         <CloseIcon onClick={handleClose} />
-        <Title>Detailed Weather Info for {city}</Title>
+        <Title role="title">Detailed Weather Info for {city}</Title>
         {content}
       </ModalContent>
     </ModalContentWrapper>

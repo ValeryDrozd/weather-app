@@ -4,7 +4,7 @@ import { getWeather } from '../../services/weather.service';
 
 const LOCAL_STORAGE_CITIES_KEY = 'cities';
 
-const getCitiesFromLocalStorage = (): string[] => {
+export const getCitiesFromLocalStorage = (): string[] => {
   const data = localStorage.getItem(LOCAL_STORAGE_CITIES_KEY);
   if (!data) {
     localStorage.setItem(LOCAL_STORAGE_CITIES_KEY, JSON.stringify([]));
