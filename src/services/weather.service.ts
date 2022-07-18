@@ -55,7 +55,7 @@ export const getHourlyWeather = async (
         ...mapWeatherFromApi(item),
         date: new Date(
           dateParts[0],
-          dateParts[1],
+          dateParts[1] - 1,
           dateParts[2],
           dateParts[3],
           dateParts[4],

@@ -32,7 +32,7 @@ export default function HourlyWeatherForecast({
           const percentage = (average - Math.round(temperature)) / radius; // relative to average
 
           const day = date.getDate(),
-            month = date.getMonth();
+            month = date.getMonth() + 1;
           const dayStr = `${day < 10 ? '0' : ''}${day}`;
           const monthStr = `${month < 10 ? '0' : ''}${month}`;
           return (
